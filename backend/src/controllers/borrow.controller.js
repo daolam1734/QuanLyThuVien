@@ -15,13 +15,11 @@ export const createBorrow = async (req, res) => {
       return res.status(400).json({ message: 'Thiếu thông tin mượn sách.' });
     }
 
-    // Kiểm tra số lượng sách mượn vượt quá giới hạn
     const totalBooks = books.reduce((sum, item) => sum + item.quantity, 0);
     if (totalBooks > MAX_BOOKS_PER_BORROW) {
       return res.status(400).json({ message: `Chỉ được mượn tối đa ${MAX_BOOKS_PER_BORROW} quyển sách.` });
     }
 
-    // Kiểm tra số lượng sách tồn kho
     for (const item of books) {
       const book = await Book.findById(item.book);
       if (!book) return res.status(404).json({ message: 'Sách không tồn tại.' });
@@ -32,7 +30,6 @@ export const createBorrow = async (req, res) => {
       await book.save();
     }
 
-    // Tính ngày hết hạn mặc định
     const borrowDate = new Date();
     const dueDate = new Date(borrowDate);
     dueDate.setDate(dueDate.getDate() + DEFAULT_BORROW_DAYS);
@@ -43,6 +40,7 @@ export const createBorrow = async (req, res) => {
       borrowDate,
       dueDate,
       createdBy: req.user._id,
+      status: 'borrowed',
     });
 
     await borrow.save();
@@ -78,7 +76,6 @@ export const returnBooks = async (req, res) => {
       return res.status(400).json({ message: 'Phiếu mượn đã được trả trước đó.' });
     }
 
-    // Cộng lại số lượng sách vào kho
     for (const item of borrow.books) {
       const book = await Book.findById(item.book._id);
       book.quantity += item.quantity;
@@ -103,26 +100,91 @@ export const extendBorrow = async (req, res) => {
     const borrow = await Borrow.findById(id);
     if (!borrow) return res.status(404).json({ message: 'Không tìm thấy phiếu mượn' });
 
+    // ✅ Bổ sung kiểm tra an toàn
+    if (borrow.status !== 'borrowed') {
+      return res.status(400).json({ message: 'Chỉ có thể gia hạn khi phiếu đang trong trạng thái mượn' });
+    }
+
+    if (!borrow.extendedTimes) {
+      borrow.extendedTimes = 0;
+    }
+
     if (borrow.extendedTimes >= MAX_EXTEND_TIMES) {
-      return res.status(400).json({ message: 'Đã vượt quá số lần gia hạn cho phép' });
+      return res.status(400).json({ message: `Đã vượt quá số lần gia hạn (${MAX_EXTEND_TIMES})` });
     }
 
-    if (borrow.status === 'returned') {
-      return res.status(400).json({ message: 'Phiếu đã trả, không thể gia hạn' });
+    if (!borrow.dueDate) {
+      return res.status(400).json({ message: 'Phiếu mượn không có hạn trả, không thể gia hạn' });
     }
 
-    // ✅ Tính hạn mới an toàn hơn
-    const newDueDate = new Date(borrow.dueDate.getTime() + EXTEND_DAYS * 24 * 60 * 60 * 1000);
-    borrow.dueDate = newDueDate;
+    // ✅ Gia hạn hạn trả
+    borrow.dueDate = new Date(borrow.dueDate.getTime() + EXTEND_DAYS * 24 * 60 * 60 * 1000);
     borrow.extendedTimes += 1;
 
     await borrow.save();
 
-    console.log('📌 Gia hạn thành công:', borrow._id, '->', borrow.dueDate);
-
     res.json({ message: 'Gia hạn thành công', data: borrow });
   } catch (err) {
-    console.error('Lỗi gia hạn:', err);
+    console.error('❌ Lỗi gia hạn:', err);
     res.status(400).json({ message: 'Gia hạn thất bại', error: err.message });
+  }
+};
+
+// 📌 Lấy tất cả phiếu mượn chưa trả của 1 độc giả
+export const getBorrowsByReader = async (req, res) => {
+  try {
+    const { readerId } = req.params;
+    const borrows = await Borrow.find({ reader: readerId, status: 'Đang mượn' }).populate('books.book');
+    res.json(borrows);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi khi lấy phiếu mượn' });
+  }
+};
+
+export const createBorrowRequest = async (req, res) => {
+  try {
+    const { books } = req.body; // [{ book: bookId, quantity: x }, ...]
+    const readerId = req.user.id;
+
+    // Kiểm tra sách còn đủ không
+    for (const item of books) {
+      const book = await Book.findById(item.book);
+      if (!book) {
+        return res.status(404).json({ message: `Sách với id ${item.book} không tồn tại.` });
+      }
+      if (book.quantity < item.quantity) {
+        return res.status(400).json({
+          message: `Sách "${book.title}" chỉ còn ${book.quantity} cuốn, không đủ để mượn ${item.quantity} cuốn.`,
+        });
+      }
+    }
+
+    // Tạo phiếu mượn mới
+    const borrow = new Borrow({
+      reader: readerId,
+      books,
+      createdBy: readerId,
+    });
+
+    await borrow.save();
+
+    // TODO: Gửi thông báo cho thủ thư (qua WebSocket, email, hoặc hệ thống thông báo nội bộ)
+
+    res.status(201).json({ message: 'Yêu cầu mượn sách đã được gửi thành công.', borrow });
+  } catch (err) {
+    console.error('Lỗi tạo phiếu mượn:', err);
+    res.status(500).json({ message: 'Lỗi hệ thống khi tạo phiếu mượn.' });
+  }
+};
+
+export const getMyBorrows = async (req, res) => {
+  try {
+    const readerId = req.user.id; // From verifyToken middleware
+    const borrows = await Borrow.find({ reader: readerId })
+      .populate('books.book') // Populate book info inside the borrow's books array
+      .sort({ createdAt: -1 });
+    res.json(borrows);
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi khi lấy danh sách sách đã mượn' });
   }
 };

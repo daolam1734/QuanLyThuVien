@@ -35,6 +35,13 @@ const borrowSchema = new mongoose.Schema(
     },
     returnDate: {
       type: Date,
+      validate: {
+        validator: function (value) {
+          if (!value) return true;
+          return value >= this.borrowDate;
+        },
+        message: 'Ngày trả không thể nhỏ hơn ngày mượn',
+      },
     },
     status: {
       type: String,
@@ -48,7 +55,7 @@ const borrowSchema = new mongoose.Schema(
         validator: function (val) {
           return val <= MAX_EXTEND_TIMES;
         },
-        message: `Chỉ được gia hạn tối đa ${MAX_EXTEND_TIMES} lần`,
+        message: `Chỉ được gia hạn tối đa ${MAX_EXTEND_TIMES} lần.`,
       },
     },
     createdBy: {
@@ -61,21 +68,29 @@ const borrowSchema = new mongoose.Schema(
   }
 );
 
-// 📌 Middleware: Kiểm tra số lượng sách không vượt quá 3 cuốn
 borrowSchema.pre('save', function (next) {
-  const totalBooks = this.books.reduce((acc, item) => acc + item.quantity, 0);
+  const totalBooks = this.books.reduce((sum, b) => sum + b.quantity, 0);
+
   if (totalBooks > MAX_BOOKS_PER_BORROW) {
-    return next(new Error(`Mỗi phiếu mượn chỉ được tối đa ${MAX_BOOKS_PER_BORROW} cuốn sách.`));
+    return next(
+      new Error(`Mỗi phiếu mượn chỉ được mượn tối đa ${MAX_BOOKS_PER_BORROW} cuốn sách.`)
+    );
   }
 
-  // Nếu chưa có dueDate, tự động set hạn trả là 20 ngày kể từ ngày mượn
   if (!this.dueDate) {
-    const due = new Date(this.borrowDate || Date.now());
-    due.setDate(due.getDate() + DEFAULT_BORROW_DURATION_DAYS);
-    this.dueDate = due;
+    const borrowDate = this.borrowDate || new Date();
+    const calculatedDueDate = new Date(borrowDate);
+    calculatedDueDate.setDate(calculatedDueDate.getDate() + DEFAULT_BORROW_DURATION_DAYS);
+    this.dueDate = calculatedDueDate;
   }
 
   next();
 });
+
+borrowSchema.methods.checkStatus = function () {
+  if (this.status === 'borrowed' && new Date() > this.dueDate) {
+    this.status = 'late';
+  }
+};
 
 export default mongoose.model('Borrow', borrowSchema);

@@ -15,6 +15,7 @@ import bookRoutes from './routes/book.routes.js';
 import borrowRoutes from './routes/borrow.routes.js';
 import readerRoutes from './routes/reader.routes.js';
 import violationRoutes from './routes/violation.routes.js';
+import borrowRequestRoutes from './routes/borrowRequest.routes.js';
 
 // Khởi tạo dotenv để đọc biến môi trường
 dotenv.config();
@@ -35,15 +36,17 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // API Routes
+app.use('/api', borrowRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/books', bookRoutes); // ✅ Sử dụng đầy đủ các route trong books
 app.use('/api/borrows', borrowRoutes);
 app.use('/api/readers', readerRoutes);
+app.use('/api/borrow-requests', borrowRequestRoutes);
 app.use('/api/violations', violationRoutes);
 app.use('/temp', tempRoutes);
-
+app.use('/api/borrows', borrowRoutes);
 // Phục vụ file tĩnh trong thư mục "public"
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -66,6 +69,11 @@ app.use(
     },
   })
 );
+
+// Route mặc định để test server
+app.get('/', (req, res) => {
+  res.send('✅ Backend is running...');
+});
 
 // Optional: hàm getMimeType nếu muốn custom content-type (hiện tại chưa cần dùng trực tiếp)
 function getMimeType(filePath) {

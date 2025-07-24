@@ -15,6 +15,11 @@ const bookSchema = new mongoose.Schema({
   year: { type: Number, min: 1000, max: new Date().getFullYear() },
   description: { type: String, trim: true },
   quantity: { type: Number, required: true, min: 0 },
+   availableQuantity: { 
+    type: Number, 
+    min: 0, 
+    default: function() { return this.quantity; } 
+  },
   coverImage: { type: String, default: 'default-book.jpg' },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true });

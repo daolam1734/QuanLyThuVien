@@ -112,12 +112,15 @@ export const updateBook = async (req, res) => {
   }
 };
 
-// ❌ Xóa sách (kèm kiểm tra đang mượn)
+// ❌ Xóa sách (kèm kiểm tra đang mượn + xóa ảnh bìa nếu có)
 export const deleteBook = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
-    if (!book) return res.status(404).json({ message: 'Sách không tồn tại' });
+    if (!book) {
+      return res.status(404).json({ message: 'Sách không tồn tại' });
+    }
 
+    // 📦 Kiểm tra sách đang được mượn chưa
     const isBorrowed = await Borrow.exists({
       'books.book': book._id,
       status: { $ne: 'returned' },
@@ -127,13 +130,24 @@ export const deleteBook = async (req, res) => {
       return res.status(400).json({ message: 'Sách đang được mượn, không thể xóa' });
     }
 
+    // 🖼️ Xóa ảnh bìa nếu có
     if (book.coverImage) {
-      const imgPath = path.join('uploads/covers', book.coverImage);
-      if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+      try {
+        const imgPath = path.resolve('uploads/covers', book.coverImage);
+        if (fs.existsSync(imgPath)) {
+          fs.unlinkSync(imgPath);
+          console.log(`🧹 Đã xóa ảnh bìa: ${book.coverImage}`);
+        } else {
+          console.warn('⚠️ File ảnh không tồn tại:', imgPath);
+        }
+      } catch (err) {
+        console.error('❌ Lỗi khi xóa ảnh bìa:', err.message);
+      }
     }
 
-    await Book.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Xóa sách và ảnh bìa thành công' });
+    // 🗑️ Xóa sách khỏi DB
+    await Book.findByIdAndDelete(book._id);
+    res.json({ message: 'Đã xóa sách và ảnh bìa (nếu có)' });
   } catch (error) {
     console.error('❌ Lỗi khi xóa sách:', error.message);
     res.status(500).json({ message: 'Lỗi khi xóa sách', error: error.message });
