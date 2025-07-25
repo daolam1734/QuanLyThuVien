@@ -1,0 +1,334 @@
+/* General container styling */
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font hiện đại hơn */
+    line-height: 1.6; /* Điều chỉnh line-height cho dễ đọc */
+    color: #333;
+    background-color: #f0f2f5; /* Nền nhẹ nhàng */
+}
+
+h1, h2, h3 { /* Áp dụng màu và font-weight cho tất cả các cấp tiêu đề */
+    color: #0056b3; /* Màu xanh đặc trưng của TVU */
+    font-weight: 700;
+    margin-bottom: 25px; /* Giảm margin-bottom chung */
+}
+
+h1 {
+    font-size: 2.5em; /* Giảm cỡ chữ h1 */
+    text-align: center;
+    padding-top: 20px;
+    margin-bottom: 20px; /* Giảm thêm margin-bottom */
+}
+
+h2 {
+    font-size: 1.9em; /* Giảm cỡ chữ h2 */
+    text-align: center;
+    padding-top: 15px; /* Giảm padding-top */
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px; /* Giảm padding-bottom */
+    margin-bottom: 30px; /* Giữ đủ khoảng cách dưới tiêu đề section */
+}
+
+h3 {
+    font-size: 1.5em; /* Giảm cỡ chữ h3 */
+    margin-bottom: 12px; /* Điều chỉnh margin-bottom cho h3 */
+}
+
+p {
+    font-size: 1em; /* Cỡ chữ paragraph tiêu chuẩn */
+    margin-bottom: 1em; /* Khoảng cách giữa các đoạn văn */
+}
+
+section {
+    margin-bottom: 50px; /* Giảm margin-bottom giữa các section */
+    padding: 35px; /* Giảm padding section */
+    background-color: #ffffff;
+    border-radius: 10px; /* Giảm bo tròn một chút */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1); /* Giảm bóng đổ nhẹ hơn */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+section:hover {
+    transform: translateY(-3px); /* Hiệu ứng nổi lên nhẹ nhàng hơn */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12); /* Bóng đổ khi hover nhẹ hơn */
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-image: linear-gradient(to right, #e0f7fa, #c2e9fb);
+    padding: 50px 20px; /* Giảm padding */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.hero-text {
+    max-width: 800px; /* Giảm max-width cho text */
+    margin-bottom: 30px; /* Giảm margin-bottom */
+}
+
+.hero h1 {
+    font-size: 3em; /* Giảm cỡ chữ h1 trong hero */
+    margin-bottom: 15px; /* Giảm margin-bottom */
+    color: #004085;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.08); /* Giảm bóng đổ chữ */
+}
+
+.hero p {
+    font-size: 1.1em; /* Giảm cỡ chữ p trong hero */
+    color: #444;
+    margin-bottom: 10px; /* Giảm margin-bottom */
+}
+
+.hero-subtext {
+    font-size: 1em; /* Giảm cỡ chữ subtext */
+    max-width: 600px; /* Giảm max-width */
+}
+
+.hero-image {
+    max-width: 700px; /* Giảm max-width ảnh */
+    border-radius: 8px; /* Giảm bo tròn ảnh */
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15); /* Giảm bóng đổ ảnh */
+}
+
+/* Mission Section */
+.mission-content {
+    gap: 30px; /* Giảm gap */
+}
+
+.mission-item {
+    padding: 25px; /* Giảm padding */
+    border-radius: 8px; /* Giảm bo tròn */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.06); /* Giảm bóng đổ */
+}
+
+.mission-item h3 {
+    font-size: 1.6em; /* Giảm cỡ chữ h3 trong mission */
+    margin-bottom: 10px;
+}
+
+.mission-item p {
+    font-size: 1em; /* Cỡ chữ p tiêu chuẩn */
+}
+
+/* History Section */
+.history-timeline {
+    padding-left: 40px; /* Giảm padding-left */
+}
+
+.history-timeline::before {
+    left: 15px; /* Điều chỉnh vị trí đường timeline */
+}
+
+.timeline-item {
+    margin-bottom: 30px; /* Giảm margin-bottom */
+    padding: 20px; /* Giảm padding */
+    border-radius: 8px; /* Giảm bo tròn */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Giảm bóng đổ */
+    margin-left: 30px; /* Giảm margin-left */
+    border-left: 4px solid #007bff; /* Giảm độ dày border */
+}
+
+.timeline-item::before {
+    left: -35px; /* Điều chỉnh vị trí dot */
+    top: 25px; /* Điều chỉnh top */
+    width: 18px; /* Giảm kích thước dot */
+    height: 18px; /* Giảm kích thước dot */
+    border: 4px solid #f0f2f5; /* Giảm độ dày border dot */
+}
+
+.timeline-item h3 {
+    font-size: 1.4em; /* Giảm cỡ chữ h3 trong history */
+    margin-bottom: 8px;
+}
+
+.timeline-item p {
+    font-size: 0.95em; /* Cỡ chữ p hơi nhỏ hơn trong timeline */
+}
+
+/* Facilities Section */
+.facilities-grid {
+    gap: 25px; /* Giảm gap */
+}
+
+.facility-item {
+    padding: 25px; /* Giảm padding */
+    border-radius: 8px; /* Giảm bo tròn */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Giảm bóng đổ */
+}
+
+.facility-item h3 {
+    font-size: 1.4em; /* Giảm cỡ chữ h3 trong facilities */
+    margin-bottom: 12px;
+}
+
+.facility-item li {
+    margin-bottom: 10px; /* Giảm margin-bottom list item */
+    padding-left: 25px; /* Giảm padding-left */
+    font-size: 0.98em; /* Hơi giảm cỡ chữ list item */
+}
+
+.facility-item li::before {
+    font-size: 1.1em; /* Giảm kích thước icon */
+}
+
+/* Activities Section */
+.activity-list {
+    gap: 25px; /* Giảm gap */
+    margin-top: 25px; /* Giảm margin-top */
+}
+
+.activity-item {
+    padding: 20px; /* Giảm padding */
+    border-radius: 8px; /* Giảm bo tròn */
+}
+
+.activity-item h3 {
+    font-size: 1.3em; /* Giảm cỡ chữ h3 trong activities */
+    margin-bottom: 8px;
+}
+
+.activity-item p {
+    font-size: 0.95em; /* Giảm cỡ chữ p trong activities */
+}
+
+/* Team Section */
+.team p {
+    max-width: 700px; /* Giảm max-width */
+    font-size: 1.05em; /* Hơi giảm cỡ chữ */
+}
+
+/* Partnerships Section */
+.partner-logos {
+    gap: 25px; /* Giảm gap */
+    margin-top: 25px; /* Giảm margin */
+    margin-bottom: 25px;
+}
+.partner-logos img {
+    max-width: 120px; /* Giảm max-width logo */
+}
+
+.partnership-text {
+    font-size: 0.95em; /* Giảm cỡ chữ */
+}
+
+/* Achievements Section */
+.achievement-list {
+    gap: 25px; /* Giảm gap */
+    margin-top: 25px; /* Giảm margin */
+}
+
+.achievement-item {
+    padding: 20px; /* Giảm padding */
+    border-radius: 8px; /* Giảm bo tròn */
+}
+.achievement-item h3 {
+    font-size: 1.3em; /* Giảm cỡ chữ */
+    margin-bottom: 8px;
+}
+.achievement-item p {
+    font-size: 0.95em; /* Giảm cỡ chữ */
+}
+
+/* FAQ Section */
+.faq-item {
+    padding: 20px; /* Giảm padding */
+    margin-bottom: 15px; /* Giảm margin */
+    border-radius: 8px; /* Giảm bo tròn */
+}
+
+.faq-item h3 {
+    font-size: 1.3em; /* Giảm cỡ chữ h3 trong FAQ */
+    margin-bottom: 0; /* Loại bỏ margin-bottom để icon căn giữa tốt hơn */
+}
+
+.faq-item h3::after {
+    font-size: 1.3em; /* Giảm kích thước icon */
+}
+
+.faq-item p {
+    margin-top: 12px; /* Giảm margin-top */
+    font-size: 0.98em; /* Giảm cỡ chữ p trong FAQ */
+}
+
+.faq-item ul {
+    margin-left: 18px; /* Giảm margin-left */
+    margin-top: 8px; /* Giảm margin-top */
+}
+
+/* Community CTA Section */
+.community-cta {
+    padding: 35px; /* Giảm padding */
+    border-radius: 10px; /* Giảm bo tròn */
+    font-size: 1.1em; /* Giảm cỡ chữ chung */
+    margin-top: 50px; /* Giảm margin-top */
+}
+
+.community-cta h2 {
+    font-size: 1.8em; /* Giảm cỡ chữ h2 */
+    margin-bottom: 18px;
+}
+
+.community-cta p {
+    margin-bottom: 12px; /* Giảm margin-bottom */
+}
+
+.social-links {
+    margin-top: 20px; /* Giảm margin-top */
+    font-size: 1.05em; /* Giảm cỡ chữ */
+}
+
+.final-contact {
+    margin-top: 18px; /* Giảm margin-top */
+    font-size: 1.05em; /* Giảm cỡ chữ */
+}
+
+
+/* Responsive adjustments (cập nhật lại để phù hợp với font mới) */
+@media (max-width: 992px) {
+    h1 { font-size: 2.2em; }
+    h2 { font-size: 1.7em; }
+    h3 { font-size: 1.4em; }
+    .hero h1 { font-size: 2.5em; }
+    .hero p { font-size: 1em; }
+    .mission-item, .activity-item, .achievement-item {
+        flex: 0 0 calc(50% - 15px); /* 2 cột trên tablet, điều chỉnh gap */
+    }
+}
+
+@media (max-width: 768px) {
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.6em; }
+    h3 { font-size: 1.3em; }
+    section { padding: 30px; margin-bottom: 40px; }
+    .hero { padding: 30px 15px; }
+    .hero h1 { font-size: 1.8em; }
+    .hero p { font-size: 0.95em; }
+    .mission-item, .facility-item, .activity-item, .achievement-item {
+        flex: 0 0 100%; /* 1 cột trên điện thoại, bỏ min-width */
+    }
+    .history-timeline { padding-left: 25px; }
+    .timeline-item { margin-left: 15px; padding: 18px; }
+    .timeline-item::before { left: -28px; top: 22px; width: 16px; height: 16px; border: 3px solid #f0f2f5; }
+    .partner-logos img { max-width: 100px; }
+    .faq-item h3 { font-size: 1.2em; }
+    .community-cta { padding: 30px; font-size: 1em; }
+}
+
+@media (max-width: 480px) {
+    .about-container { padding: 10px; }
+    h1 { font-size: 1.6em; }
+    h2 { font-size: 1.4em; }
+    h3 { font-size: 1.2em; }
+    section { padding: 20px; margin-bottom: 30px; }
+    .hero h1 { font-size: 1.5em; }
+    .hero p { font-size: 0.85em; }
+    .community-cta { padding: 20px; font-size: 0.9em; }
+    .social-links { font-size: 0.95em; }
+    .final-contact { font-size: 0.95em; }
+}

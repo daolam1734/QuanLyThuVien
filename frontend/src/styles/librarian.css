@@ -1,0 +1,27 @@
+.librarian-dashboard {
+  padding: 2rem;
+  text-align: center;
+}
+
+.dashboard-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.dashboard-card {
+  padding: 1.5rem 2rem;
+  background-color: #e3f2fd;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #0d47a1;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.dashboard-card:hover {
+  background-color: #bbdefb;
+  transform: scale(1.05);
+}
