@@ -16,6 +16,7 @@ import borrowRoutes from './routes/borrow.routes.js';
 import readerRoutes from './routes/reader.routes.js';
 import violationRoutes from './routes/violation.routes.js';
 import borrowRequestRoutes from './routes/borrowRequest.routes.js';
+import statsRoutes from './routes/stats.routes.js';
 
 // Khởi tạo dotenv để đọc biến môi trường
 dotenv.config();
@@ -49,7 +50,7 @@ app.use('/temp', tempRoutes);
 app.use('/api/borrows', borrowRoutes);
 // Phục vụ file tĩnh trong thư mục "public"
 app.use(express.static(path.join(__dirname, '../public')));
-
+app.use('/api/stats', statsRoutes);
 // Phục vụ ảnh avatar người dùng
 app.use(
   '/uploads/avatars',

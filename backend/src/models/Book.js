@@ -21,7 +21,8 @@ const bookSchema = new mongoose.Schema({
     default: function() { return this.quantity; } 
   },
   coverImage: { type: String, default: 'default-book.jpg' },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  isFeatured: { type: Boolean, default: false },
 }, { timestamps: true });
 
 export default mongoose.model('Book', bookSchema);

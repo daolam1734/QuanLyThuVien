@@ -6,7 +6,15 @@ import path from 'path';
 // 📚 Lấy danh sách tất cả sách kèm số lượng đang được mượn
 export const getAllBooks = async (req, res) => {
   try {
-    const books = await Book.find().sort({ createdAt: -1 });
+    console.log('🔍 Query:', req.query)
+    const filter = {};
+
+    // Thêm điều kiện lọc nếu có ?isFeatured=true
+    if (req.query.isFeatured === 'true') {
+      filter.isFeatured = true;
+    }
+
+    const books = await Book.find(filter).sort({ createdAt: -1 });
 
     const activeBorrows = await Borrow.find({ status: { $ne: 'returned' } });
 
@@ -58,6 +66,7 @@ export const createBook = async (req, res) => {
       quantity: req.body.quantity ? Number(req.body.quantity) : 0,
       coverImage: req.file?.filename || null,
       createdBy: req.user?.id || null,
+      isFeatured: req.body.isFeatured === 'true'
     });
 
     const saved = await newBook.save();
