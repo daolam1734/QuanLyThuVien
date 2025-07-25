@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import SidebarMenu from './components/SidebarMenu';
 import ReaderManager from './readers/ReaderManager';
 import BookManager from './books/BookManager';
-import BorrowManager from './borrowed/BorrowManager';
+import BorrowManager from './borrow/BorrowManager';
+import BorrowRequestManager from './borrow/BorrowRequestManager';
 import ViolationManager from './violation/ViolationManager';
 import './styles/LibrarianDashboard.css';
 
@@ -14,6 +15,7 @@ export default function LibrarianDashboard() {
       case 'readers': return <ReaderManager />;
       case 'books': return <BookManager />;
       case 'borrows': return <BorrowManager />;
+      case 'requests': return <BorrowRequestManager />;
       case 'violations': return <ViolationManager />;
       default: return <BookManager />;
     }

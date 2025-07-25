@@ -16,6 +16,9 @@ export default function SidebarMenu({ activeTab, setActiveTab }) {
         <li className={activeTab === 'borrows' ? 'active' : ''} onClick={() => setActiveTab('borrows')}>
           🔄 Mượn trả
         </li>
+        <li className={activeTab === 'requests' ? 'active' : ''} onClick={() => setActiveTab('requests')}>
+          📩 Yêu cầu mượn
+        </li>
         <li className={activeTab === 'violations' ? 'active' : ''} onClick={() => setActiveTab('violations')}>
           ⚠️ Vi phạm
         </li>
