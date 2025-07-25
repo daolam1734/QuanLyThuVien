@@ -25,3 +25,8 @@ export const getBorrowById = async (borrowId) => {
 export const deleteBorrow = async (borrowId) => {
   return axiosClient.delete(`${API_URL}/${borrowId}`);
 };
+
+export const getBorrowedBooks = async () => {
+  const res = await axiosClient.get('/borrows/my-borrows');
+  return res.data;
+};
