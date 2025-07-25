@@ -1,0 +1,45 @@
+.borrow-request-manager {
+  padding: 1rem;
+}
+
+.request-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.request-table th, .request-table td {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.request-table th {
+  background-color: #f4f6f8;
+}
+
+.btn-approve {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-approve:hover {
+  background-color: #45a049;
+}
+
+.btn-reject {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-reject:hover {
+  background-color: #da190b;
+}

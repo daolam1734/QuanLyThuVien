@@ -1,49 +1,53 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/BookFormModal.css';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || '';
+const API_BASE_URL = process.env.REACT_APP_API_URL || window.location.origin;
 
 export default function BookFormModal({ visible, onClose, onSubmit, bookData }) {
   const [form, setForm] = useState({});
   const [coverPreview, setCoverPreview] = useState(null);
 
+  const generatePreview = useCallback((file) => {
+    if (!file) return null;
+    return file instanceof File
+      ? URL.createObjectURL(file)
+      : `${API_BASE_URL}/uploads/covers/${file}`;
+  }, []);
+
   useEffect(() => {
     if (bookData) {
       setForm(bookData);
-      setCoverPreview(
-        bookData.coverImage
-          ? `${API_BASE_URL}/uploads/covers/${bookData.coverImage}`
-          : null
-      );
+      setCoverPreview(generatePreview(bookData.coverImage));
     } else {
       setForm({});
       setCoverPreview(null);
     }
-  }, [bookData]);
+  }, [bookData, generatePreview]);
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
     if (name === 'coverImage') {
       const file = files[0];
       setForm((prev) => ({ ...prev, coverImage: file }));
-      setCoverPreview(URL.createObjectURL(file));
+      setCoverPreview(generatePreview(file));
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));
     }
-  };
+  }, [generatePreview]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
     const data = new FormData();
     for (let key in form) {
-      if (key === 'coverImage' && form.coverImage instanceof File) {
-        data.append('coverImage', form.coverImage);
-      } else if (form[key] !== undefined && form[key] !== null) {
-        data.append(key, form[key]);
+      const value = form[key];
+      if (key === 'coverImage' && value instanceof File) {
+        data.append('coverImage', value);
+      } else if (value !== undefined && value !== null) {
+        data.append(key, value);
       }
     }
     onSubmit(data);
-  };
+  }, [form, onSubmit]);
 
   if (!visible) return null;
 
@@ -124,8 +128,7 @@ export default function BookFormModal({ visible, onClose, onSubmit, bookData }) 
                   required
                 />
               </label>
-            </div>
-
+            </div> 
             <div className="form-right">
               <label>
                 Mô tả nội dung:
@@ -135,7 +138,6 @@ export default function BookFormModal({ visible, onClose, onSubmit, bookData }) 
                   value={form.description || ''}
                 />
               </label>
-
               <label>
                 Ảnh bìa:
                 <input

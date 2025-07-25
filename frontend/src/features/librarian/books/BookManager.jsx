@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import BookTable from './BookTable';
 import BookFormModal from './BookFormModal';
 import Pagination from '../../../components/shared/Pagination';
@@ -8,7 +8,7 @@ import {
   updateBook,
   deleteBook,
   getBookSummary,
-} from '../../../api/bookApi';
+} from '../../../api/book.api';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,7 +16,7 @@ import '../styles/BookManager.css';
 import { useAuth } from '../../../contexts/AuthContext';
 
 export default function BookManager() {
-  const { token } = useAuth(); // ✅ lấy token từ context
+  const { token } = useAuth();
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -34,19 +34,10 @@ export default function BookManager() {
 
   const itemsPerPage = 5;
 
-  useEffect(() => {
-    loadBooks();
-    loadSummary();
-  }, []);
-
-  useEffect(() => {
-    handleSearch(searchTerm);
-  }, [books, searchTerm]);
-
-  const loadBooks = async () => {
+  const loadBooks = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getBooks(token); // ✅ gọi API `/books/manage` với token
+      const data = await getBooks(token);
       setBooks(data);
       setLoading(false);
     } catch (err) {
@@ -54,16 +45,40 @@ export default function BookManager() {
       setErrorMessage('Không thể tải danh sách sách.');
       setLoading(false);
     }
-  };
+  }, [token]);
 
-  const loadSummary = async () => {
+  const loadSummary = useCallback(async () => {
     try {
-      const res = await getBookSummary(token); // ✅ truyền token
+      const res = await getBookSummary(token);
       setSummary(res);
     } catch (err) {
       console.error('❌ Lỗi tải tổng quan sách:', err);
     }
-  };
+  }, [token]);
+
+  const handleSearch = useCallback(
+    (term) => {
+      const lower = term.toLowerCase();
+      const filtered = books.filter(
+        (book) =>
+          book.title.toLowerCase().includes(lower) ||
+          book.author.toLowerCase().includes(lower) ||
+          book.bookCode.toLowerCase().includes(lower)
+      );
+      setFilteredBooks(filtered);
+      setCurrentPage(1);
+    },
+    [books]
+  );
+
+  useEffect(() => {
+    loadBooks();
+    loadSummary();
+  }, [loadBooks, loadSummary]);
+
+  useEffect(() => {
+    handleSearch(searchTerm);
+  }, [searchTerm, handleSearch]);
 
   const handleAdd = () => {
     setSelectedBook(null);
@@ -96,11 +111,7 @@ export default function BookManager() {
       } catch (err) {
         const msg = err.response?.data?.message || 'Không thể xoá sách!';
         if (msg.includes('đang được mượn')) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Không thể xoá sách!',
-            text: msg,
-          });
+          Swal.fire({ icon: 'error', title: 'Không thể xoá sách!', text: msg });
         } else {
           toast.error(msg);
         }
@@ -128,18 +139,6 @@ export default function BookManager() {
     }
   };
 
-  const handleSearch = (term) => {
-    const lower = term.toLowerCase();
-    const filtered = books.filter(
-      (book) =>
-        book.title.toLowerCase().includes(lower) ||
-        book.author.toLowerCase().includes(lower) ||
-        book.bookCode.toLowerCase().includes(lower)
-    );
-    setFilteredBooks(filtered);
-    setCurrentPage(1);
-  };
-
   const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentBooks = filteredBooks.slice(startIndex, startIndex + itemsPerPage);
@@ -148,9 +147,6 @@ export default function BookManager() {
     <div className="book-manager-page">
       <div className="header-bar">
         <h2 className="title">📚 Quản lý sách</h2>
-        <button className="add-book-btn" onClick={handleAdd}>
-          ➕ Thêm sách mới
-        </button>
       </div>
 
       <div className="summary-bar">
@@ -168,6 +164,7 @@ export default function BookManager() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
+        <button className="add-book-btn" onClick={handleAdd}>➕ Thêm sách mới</button>
       </div>
 
       <p className="book-count">
