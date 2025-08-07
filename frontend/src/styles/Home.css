@@ -1,0 +1,222 @@
+.book-catalog-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  padding: 24px;
+  gap: 24px;
+  background-color: #f4f6f8;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+  align-items: flex-start;
+}
+
+/* ==== Sidebar (Trái) ==== */
+.sidebar {
+  width: 320px; /* Kích thước cố định */
+  flex-shrink: 0; /* Không co lại */
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.tabs button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #eaeaea;
+  cursor: pointer;
+  font-size: 15px;
+  text-align: left;
+  color: #444;
+  transition: all 0.2s ease-in-out;
+}
+
+.tabs button:hover {
+  background-color: #d0d0d0;
+}
+
+.tabs button.active {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+}
+
+.summary-bar {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+}
+
+.summary-bar h3 {
+  margin-bottom: 12px;
+  font-size: 17px;
+  color: #333;
+}
+
+.summary-bar p {
+  margin: 6px 0;
+  padding: 6px 12px;
+  background-color: #f3f6fa;
+  border-radius: 5px;
+  display: inline-block;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+
+/* ==== Nội dung Phải ==== */
+.book-content {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==== Banner ==== */
+.book-banner {
+  width: 100%;
+  height: 260px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.book-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.book-banner img[style*="opacity: 1"] {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* ==== Grid sách ==== */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.book-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+}
+
+.book-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background-color: #ccc;
+}
+
+.info {
+  padding: 12px 14px;
+  flex: 1;
+}
+
+.info h3 {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #1f1f1f;
+  line-height: 1.4;
+}
+
+.info p {
+  font-size: 13px;
+  color: #555;
+  margin: 4px 0;
+}
+
+.book-card button {
+  margin: 0 14px 14px;
+  padding: 8px 12px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.book-card button:hover {
+  background-color: #135ba1;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 1024px) {
+  .book-catalog-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    max-width: 100%;
+    position: relative;
+    top: 0;
+  }
+
+  .book-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .book-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .book-banner {
+    height: 220px;
+    border-radius: 10px;
+  }
+
+  .book-cover {
+    height: 160px;
+  }
+
+  .tabs button {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .summary-bar h3,
+  .summary-bar p {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,183 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  font-family: 'Segoe UI', sans-serif;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+  color: #333;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(to right, #003366, #005a9e);
+  color: white;
+  padding: 60px 30px;
+  border-radius: 12px;
+  position: relative;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+
+.floating-elements {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  display: flex;
+  gap: 10px;
+  font-size: 28px;
+  opacity: 0.5;
+  animation: float 3s infinite alternate ease-in-out;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(15px); }
+}
+
+.hero-title {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  opacity: 0.9;
+  text-align: center;
+}
+
+/* Grid Layout */
+.content-grid {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.contact-form-section, .contact-info-section {
+  flex: 1;
+  min-width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.06);
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #003366;
+  border-left: 4px solid #005a9e;
+  padding-left: 12px;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.form-control:focus {
+  border-color: #005a9e;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 90, 158, 0.2);
+}
+
+textarea.form-control {
+  resize: vertical;
+}
+
+.btn-submit {
+  background: #005a9e;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-submit:hover {
+  background: #003366;
+}
+
+/* Success Message */
+.success-message {
+  background-color: #e6ffe6;
+  color: #2d662d;
+  border: 1px solid #b2d8b2;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+}
+
+/* Contact Info */
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.contact-icon {
+  font-size: 24px;
+  margin-right: 12px;
+  color: #005a9e;
+}
+
+.contact-details h4 {
+  margin-bottom: 4px;
+  font-size: 16px;
+  color: #003366;
+}
+
+.contact-details p {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Working Hours */
+.working-hours {
+  margin-top: 30px;
+}
+
+.hours-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.hours-day {
+  font-weight: 500;
+}
+
+.map-section {
+  margin-top: 25px;
+}
+
+.map-placeholder {
+  background: #f3f3f3;
+  padding: 20px;
+  border: 1px dashed #ccc;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 16px;
+}
